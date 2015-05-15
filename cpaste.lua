@@ -29,7 +29,7 @@ end))
 srv.POST("/", mw.new(function() -- TBD, putting up pastes
 	local data = form("f")
 	if data ~= "" then
-		math.randomseed(os.time())
+		math.randomseed(unixtime())
 		local id = ""
 		local week = 604800
 		local stringtable={}
