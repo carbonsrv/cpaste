@@ -1,6 +1,6 @@
 -- CPaste, micro pastebin running on Carbon
 -- Settings:
-url = dofile("settings.lua")
+ret = dofile("settings.lua")
 -- Actual Code:
 srv.Use(mw.Logger()) -- Activate logger.
 
@@ -26,12 +26,13 @@ srv.GET("/get/:id", mw.new(function() -- Main Retrieval of Pastes.
 	con.Close()
 end))
 
+srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
+
 srv.POST("/", mw.new(function() -- TBD, putting up pastes
 	local data = form("f")
 	if data ~= "" then
 		math.randomseed(unixtime())
 		local id = ""
-		local week = 604800
 		local stringtable={}
 		for i=1,8 do
 			local n = math.random(48, 122)
@@ -41,15 +42,15 @@ srv.POST("/", mw.new(function() -- TBD, putting up pastes
 				id = id .. string.char(math.random(97, 122))
 			end
 		end
-		local con, err = redis.connectTimeout("127.0.0.1:6379", 10) -- Connect to Redis
+		local con, err = redis.connectTimeout(redis, 10) -- Connect to Redis
 		if err ~= nil then error(err) end
 		local r,err = con.Cmd("set", "cpaste:"..id, data) -- Set cpaste:<randomid> to data
 		if err ~= nil then error(err) end
-		local r,err = con.Cmd("expire", "cpaste:"..id, week) -- Make it expire
+		local r,err = con.Cmd("expire", "cpaste:"..id, expiretime) -- Make it expire
 		if err ~= nil then error(err) end
 		con.Close()
 		content(url..id.."\n")
 	else
 		content("No content given.")
 	end
-end, {["url"]=url}))
+end, {url=ret.url, expiretime=ret.expiresecs, redis=ret.redis}))
