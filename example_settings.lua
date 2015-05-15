@@ -8,7 +8,8 @@ mainpage = doctype()(
 	),
 	tag"body"(
 		tag"h1" "CPaste",
-		"CPaste is a micro paste service using Carbon and Redis",
+		"CPaste is a micro paste service using Carbon and Redis.", tag"br",
+		tag"a"[{href="http://github.com/vifino/cpaste"}]("Get it here."), tag"br",
 		tag"h1" "Example Usage",
 		tag"blockquote"[{cite="http://github.com/vifino/cpaste"}](
 		"$ cat myfile.txt | curl -F 'f=<-' "..url, tag"br",
