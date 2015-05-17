@@ -29,7 +29,7 @@ end))
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 
 srv.POST("/", mw.new(function() -- TBD, putting up pastes
-	data = form("f")
+	local data = form("f")
 	if data == "" then
 		data = form("c")
 	end
@@ -46,7 +46,7 @@ srv.POST("/", mw.new(function() -- TBD, putting up pastes
 					id = id .. string.char(math.random(97, 122))
 				end
 			end
-			local con, err = redis.connectTimeout(redis, 10) -- Connect to Redis
+			local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
 			if err ~= nil then error(err) end
 			local r,err = con.Cmd("set", "cpaste:"..id, data) -- Set cpaste:<randomid> to data
 			if err ~= nil then error(err) end
@@ -60,4 +60,4 @@ srv.POST("/", mw.new(function() -- TBD, putting up pastes
 	else
 		content("No content given.", 400)
 	end
-end, {url=ret.url, expiretime=ret.expiresecs, redis=ret.redis, maxpastesize=ret.maxpastesize}))
+end, {url=ret.url, expiretime=ret.expiresecs, redis_addr=ret.redis, maxpastesize=ret.maxpastesize}))
