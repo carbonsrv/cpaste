@@ -2,6 +2,7 @@
 url = "http://mydomain.mytld:8081/get/"
 redis = "127.0.0.1:6379"
 expiresecs = 604800
+maxpastesize = 64 * 1024 -- 64KiB
 mainpage = doctype()(
 	tag"head"(
 		tag"title" "CPaste Server"
@@ -27,4 +28,5 @@ ret.url = url
 ret.expiresecs = expiresecs
 ret.mainpage = mainpage
 ret.redis = redis
+ret.maxpastesize = maxpastesize
 return ret
