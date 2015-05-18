@@ -28,7 +28,7 @@ end))
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 
-srv.POST("/", mw.new(function() -- TBD, putting up pastes
+srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("f")
 	if data == "" then
 		data = form("c")
