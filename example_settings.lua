@@ -1,5 +1,5 @@
 -- Settings
-url = "http://mydomain.mytld:8081/get/"
+url = "http://mydomain.mytld:8081/"
 redis = "127.0.0.1:6379"
 expiresecs = 604800
 maxpastesize = 64 * 1024 -- 64KiB
