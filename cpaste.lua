@@ -1,4 +1,5 @@
 -- CPaste, micro pastebin running on Carbon
+print("Morning, Ladies and Gentlemen, CPaste here.")
 -- Settings:
 ret = dofile("settings.lua")
 -- Actual Code:
@@ -7,7 +8,7 @@ srv.Use(mw.Logger()) -- Activate logger.
 srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 	local id = params("id") -- Get ID
 	if #id ~= 8 then
-		content("No such paste.", 404)
+		content("No such paste.", 404, "text/plain")
 	else
 		local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
 		if err ~= nil then error(err) end
@@ -26,7 +27,7 @@ srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 			))
 		else
 			if cpastemdata == "plain" then
-				context.String(200, res)
+				content(res, 200, "text/plain")
 			else
 				content(res)
 			end
@@ -69,11 +70,11 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			local r, err = con.Cmd("expire", "cpastemdata:"..id, expiretime) -- Make it expire
 			if err ~= nil then error(err) end
 			con.Close()
-			content(url..id.."\n")
+			content(url..id.."\n", 200, "text/plain")
 		else
-			content("Content too big. Max is "..tostring(maxpastesize).." Bytes, given "..tostring(#data).." Bytes.", 400)
+			content("Content too big. Max is "..tostring(maxpastesize).." Bytes, given "..tostring(#data).." Bytes.", 400, "text/plain")
 		end
 	else
-		content("No content given.", 400)
+		content("No content given.", 400, "text/plain")
 	end
 end, {url=ret.url, expiretime=ret.expiresecs, redis_addr=ret.redis, maxpastesize=ret.maxpastesize}))
