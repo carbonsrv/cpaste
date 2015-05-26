@@ -38,15 +38,9 @@ end, {redis_addr=ret.redis}))
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
-	local data = form("f")
-	if not data then
-		data = form("c")
-	end
-	local plain = true
-	if not form("html") then
-		plain = false
-	end
-	if not data then
+	local data = form("f") or form("c")
+	local plain = form("html") and false or true
+	if data then
 		if #data <= maxpastesize then
 			math.randomseed(unixtime())
 			local id = ""
