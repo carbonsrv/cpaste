@@ -7,7 +7,19 @@ srv.Use(mw.Logger()) -- Activate logger.
 
 srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 	local id = params("id") -- Get ID
-	if #id ~= 8 then
+	if id== "paste" then
+		content(doctype()(
+			tag"head"(
+				tag"title" "CPaste"
+			),
+			tag"body"(
+				tag"form"[{action=url, method="POST", ["accept-charset"]="UTF-8"}](
+					tag"textarea"[{name="c", cols="80", rows="24"}](),
+					tag"br",
+					tag"button"[{type="submit"}]("paste")
+			)
+		)))
+	elseif #id ~= 8 then
 		content("No such paste.", 404, "text/plain")
 	else
 		local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
@@ -34,7 +46,7 @@ srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 		end
 		con.Close()
 	end
-end, {redis_addr=ret.redis}))
+end, {redis_addr=ret.redis, url=ret.url}))
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
@@ -72,3 +84,4 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 		content("No content given.", 400, "text/plain")
 	end
 end, {url=ret.url, expiretime=ret.expiresecs, redis_addr=ret.redis, maxpastesize=ret.maxpastesize}))
+print("Ready for action!")
