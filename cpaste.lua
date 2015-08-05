@@ -1,24 +1,16 @@
 -- CPaste, micro pastebin running on Carbon
 print("Morning, Ladies and Gentlemen, CPaste here.")
 -- Settings:
-ret = dofile("settings.lua")
+ret = assert(loadfile("settings.lua")())
+-- Web Paste
+webpaste = assert(loadfile("webpaste.lua")(ret))
 -- Actual Code:
 srv.Use(mw.Logger()) -- Activate logger.
 
 srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 	local id = params("id") -- Get ID
 	if id== "paste" then
-		content(doctype()(
-			tag"head"(
-				tag"title" "CPaste"
-			),
-			tag"body"(
-				tag"form"[{action=url, method="POST", ["accept-charset"]="UTF-8"}](
-					tag"textarea"[{name="c", cols="80", rows="24"}](),
-					tag"br",
-					tag"button"[{type="submit"}]("paste")
-			)
-		)))
+		content(webpaste)
 	elseif #id ~= 8 then
 		content("No such paste.", 404, "text/plain")
 	else
@@ -46,7 +38,7 @@ srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 		end
 		con.Close()
 	end
-end, {redis_addr=ret.redis, url=ret.url}))
+end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste}))
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
