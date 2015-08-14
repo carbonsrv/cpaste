@@ -7,11 +7,27 @@ webpaste = assert(loadfile("webpaste.lua")(ret))
 -- Actual Code:
 srv.Use(mw.Logger()) -- Activate logger.
 
-srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
-	local id = params("id") -- Get ID
-	if id== "paste" then
+getplain = mw.new(function() -- Main Retrieval of Pastes.
+	local id = params("seg2")
+	local method = "pretty"
+	if id == nil then
+		print("id is nil")
+		id = params("seg1")
+	else
+		print("id is not nil")
+		method = params("seg1")
+		id = params("seg2")
+		if id == nil then
+			content("No such paste.", 404, "text/plain")
+			return
+		end
+		id = id:sub(2, -1)
+	end
+	print(id)
+	print(method)
+	if id == "paste" then
 		content(webpaste)
-	elseif #id ~= 8 then
+	elseif #id ~= 8 or id == nil then
 		content("No such paste.", 404, "text/plain")
 	else
 		local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
@@ -31,14 +47,25 @@ srv.GET("/:id", mw.new(function() -- Main Retrieval of Pastes.
 			))
 		else
 			if cpastemdata == "plain" then
-				content(res, 200, "text/plain")
+				if method == "raw" then
+					print("raw")
+					content(res, 200, "text/plain")
+				elseif method == "pretty" or method == "hl" then
+					print("pretty")
+					content(syntaxhl(res), 200)
+				else
+					content("No such action. (Try 'raw' or 'pretty')", 404)
+				end
 			else
 				content(res)
 			end
 		end
 		con.Close()
 	end
-end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste}))
+end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste})
+
+srv.GET("/:seg1", getplain)
+srv.GET("/:seg1/*seg2", getplain)
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
