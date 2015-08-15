@@ -71,6 +71,13 @@ srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("f") or form("c")
 	local plain = form("html") and false or true
+	local giveraw = false
+	local giverawform = form("raw")
+	if giverawform == "true" or giverawform == "yes" or giverawform == "y" then
+		giveraw = true
+	else
+		giveraw = false
+	end
 	if data then
 		if #data <= maxpastesize then
 			math.randomseed(unixtime())
@@ -95,7 +102,11 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			local r, err = con.Cmd("expire", "cpastemdata:"..id, expiretime) -- Make it expire
 			if err ~= nil then error(err) end
 			con.Close()
-			content(url..id.."\n", 200, "text/plain")
+			if giveraw then
+				content(url.."raw/"..id.."\n", 200, "text/plain")
+			else
+				content(url..id.."\n", 200, "text/plain")
+			end
 		else
 			content("Content too big. Max is "..tostring(maxpastesize).." Bytes, given "..tostring(#data).." Bytes.", 400, "text/plain")
 		end
