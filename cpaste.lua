@@ -11,10 +11,8 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 	local id = params("seg2")
 	local method = "pretty"
 	if id == nil then
-		print("id is nil")
 		id = params("seg1")
 	else
-		print("id is not nil")
 		method = params("seg1")
 		id = params("seg2")
 		if id == nil then
@@ -23,8 +21,6 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		end
 		id = id:sub(2, -1)
 	end
-	print(id)
-	print(method)
 	if id == "paste" then
 		content(webpaste)
 	elseif #id ~= 8 or id == nil then
@@ -48,10 +44,8 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		else
 			if cpastemdata == "plain" then
 				if method == "raw" then
-					print("raw")
 					content(res, 200, "text/plain")
 				elseif method == "pretty" or method == "hl" then
-					print("pretty")
 					content(syntaxhl(res), 200)
 				else
 					content("No such action. (Try 'raw' or 'pretty')", 404)
