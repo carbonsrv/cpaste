@@ -4,6 +4,14 @@ print("Morning, Ladies and Gentlemen, CPaste here.")
 ret = assert(loadfile("settings.lua")())
 -- Web Paste
 webpaste = assert(loadfile("webpaste.lua")(ret))
+-- Load css
+local css = ""
+local f = io.open("highlight.css")
+if f then
+	print("Read highlight.css")
+	css = f:read("*a")
+	f:close()
+end
 -- Actual Code:
 srv.Use(mw.Logger()) -- Activate logger.
 
@@ -46,7 +54,7 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 				if method == "raw" then
 					content(res, 200, "text/plain")
 				elseif method == "pretty" or method == "hl" then
-					content(syntaxhl(res), 200)
+					content(syntaxhl(res, hlcss), 200)
 				else
 					content("No such action. (Try 'raw' or 'pretty')", 404)
 				end
@@ -56,7 +64,7 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		end
 		con.Close()
 	end
-end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste})
+end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste, hlcss=css})
 
 srv.GET("/:seg1", getplain)
 srv.GET("/:seg1/*seg2", getplain)
