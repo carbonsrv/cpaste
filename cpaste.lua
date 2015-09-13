@@ -63,8 +63,8 @@ srv.GET("/:seg1/*seg2", getplain)
 
 srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
-	local data = form("f") or form("c")
-	local plain = form("html") and false or true
+	local data = form("c") or form("f")
+	local type = form("type") or "plain"
 	local giveraw = false
 	local giverawform = form("raw")
 	if giverawform == "true" or giverawform == "yes" or giverawform == "y" then
@@ -89,7 +89,7 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			if err ~= nil then error(err) end
 			local r, err = con.Cmd("set", "cpaste:"..id, data) -- Set cpaste:<randomid> to data
 			if err ~= nil then error(err) end
-			local r, err = con.Cmd("set", "cpastemdata:"..id, plain and "plain" or "html") -- Set cpastemdate:<randomid> to the metadata
+			local r, err = con.Cmd("set", "cpastemdata:"..id, type) -- Set cpastemdata:<randomid> to the metadata
 			if err ~= nil then error(err) end
 			local r, err = con.Cmd("expire", "cpaste:"..id, expiretime) -- Make it expire
 			if err ~= nil then error(err) end
