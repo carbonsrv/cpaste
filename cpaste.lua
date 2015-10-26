@@ -50,16 +50,18 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 				)
 			))
 		else
-			if cpastemdata == "plain" then
-				if method == "raw" then
-					content(res, 200, "text/plain")
-				elseif method == "pretty" or method == "hl" then
+			if method == "raw" then
+				content(res, 200, "text/plain")
+			elseif method == "pretty" or method == "hl" then
+				if cpastemdata == "html" then
+					content(res)
+				elseif cpastemdata == "plain" then
 					content(syntaxhl(res, hlcss), 200)
 				else
-					content("No such action. (Try 'raw' or 'pretty')", 404)
+					content(res, 200, cpastemdata)
 				end
 			else
-				content(res)
+				content("No such action. (Try 'raw' or 'pretty')", 404)
 			end
 		end
 		con.Close()
