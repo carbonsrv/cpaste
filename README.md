@@ -1,11 +1,11 @@
 # cpaste
-CPaste is a micro paste service using Carbon and Redis
+CPaste is a paste service using Carbon and Redis
 
 # Example Usage
 ```sh
 $ cat myfile.txt | curl -F 'f=<-' mydomain.mytld:8081
-http://mydomain.mytld:8081/get/rpPxsp6d
-$ curl http://mydomain.mytld:8081/get/rpPxsp6d
+http://mydomain.mytld:8081/rpPxsp6d
+$ curl http://mydomain.mytld:8081/raw/rpPxsp6d
 <Content of myfile.txt>
 ```
 
