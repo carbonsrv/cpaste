@@ -6,9 +6,9 @@ ret = assert(loadfile("settings.lua")())
 webpaste = assert(loadfile("webpaste.lua")(ret))
 -- Load css
 local css = ""
-local f = io.open("highlight.css")
+local f = io.open("thirdparty/highlight.css")
 if f then
-	print("Read highlight.css")
+	print("Read thirdparty/highlight.css")
 	css = f:read("*a")
 	f:close()
 end
@@ -16,20 +16,22 @@ end
 srv.Use(mw.Logger()) -- Activate logger.
 
 getplain = mw.new(function() -- Main Retrieval of Pastes.
-	local id = params("seg2")
+	local seg1 = params("seg1")
+	local seg2 = params("seg2")
+	local id = seg2
 	local method = "pretty"
 	if id == nil then
-		id = params("seg1")
+		id = seg1
 	else
-		method = params("seg1")
-		id = params("seg2")
+		method = seg1
+		id = seg2
 		if id == nil then
 			content("No such paste.", 404, "text/plain")
 			return
 		end
 		id = id:sub(2, -1)
 	end
-	if id == "paste" then
+	if seg1 == "paste" then
 		content(webpaste)
 	elseif #id ~= 8 or id == nil then
 		content("No such paste.", 404, "text/plain")
@@ -118,4 +120,5 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 		content("No content given.", 400, "text/plain")
 	end
 end, {url=ret.url, expiretime=ret.expiresecs, redis_addr=ret.redis, maxpastesize=ret.maxpastesize}))
+
 print("Ready for action!")
