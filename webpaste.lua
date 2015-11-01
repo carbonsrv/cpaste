@@ -10,16 +10,9 @@ return doctype()(
 				$('#submit').click(function() {
 					var sentType = "plain";
 					var pasteTypes = document.getElementsByName("pasteType");
-					var i = 0;
-					while (true) {
-						if (pasteTypes[i].checked) {
-							var val = pasteTypes[i].id;
-							if (val == "radio1") sentType = "plain";
-							if (val == "radio2") sentType = "raw";
-							if (val == "radio3") sentType = "html";
-							break;
-						}
-					}
+					if (pasteTypes[0].checked) sentType = "plain";
+					if (pasteTypes[1].checked) sentType = "raw";
+					if (pasteTypes[2].checked) sentType = "html";
 					$.ajax({
 						data: {
 							c: $('textarea').val(),
