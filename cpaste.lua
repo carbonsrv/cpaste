@@ -77,7 +77,7 @@ srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("c") or form("f")
 	local type = form("type") or "plain"
-	local expire = form("expire") or expiretime
+	local expire = tonumber(form("expire")) or expiretime
 	local giveraw = false
 	local giverawform = form("raw")
 	if giverawform == "true" or giverawform == "yes" or giverawform == "y" then
