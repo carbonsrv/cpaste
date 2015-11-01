@@ -57,7 +57,7 @@ return doctype()(
 			button:hover {
 				background-color: #010101;
 			}
-			pasteTypeForm {
+			pasteType {
 				padding: 5px;
 				background-color: #010101;
 				color: #dcdcdc;
@@ -98,11 +98,9 @@ return doctype()(
 	tag"body"(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
 		tag"button"[{id="submit",action=ret.url}]("Paste!"),
-		tag"form"[{action="",name="pasteTypeForm"}](
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Normal"),
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Raw"),
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("HTML")
-		),
+		tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Normal"),
+		tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Raw"),
+		tag"input"[{type="radio",class="pasteType",name="pasteType"}]("HTML"),
 		tag"div"[{id="resultholder"}](
 			tag"a"[{id="result"}]
 		)
