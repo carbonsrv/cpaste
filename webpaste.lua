@@ -8,9 +8,15 @@ return doctype()(
 		tag"script"([[
 			$(document).ready(function() {
 				$('#submit').click(function() {
+					var sentType = "plain";
+					var pasteTypes = document.getElementsByName("pasteType");
+					if (pasteTypes[0].checked) sentType = "plain";
+					if (pasteTypes[1].checked) sentType = "raw";
+					if (pasteTypes[2].checked) sentType = "html";
 					$.ajax({
 						data: {
-							c: $('textarea').val()
+							c: $('textarea').val(),
+							type: sentType
 						},
 						type: "POST",
 						url: $('#submit').attr('action'),
@@ -33,6 +39,7 @@ return doctype()(
 				margin: 0px;
 				width: 100%;
 				height: 100%;
+				background-color: #010101;
 			}
 			button {
 				padding: 5px;
@@ -51,13 +58,24 @@ return doctype()(
 			button:hover {
 				background-color: #010101;
 			}
+			div.pasteTypeHolder {
+				padding: 5px;
+				background-color: #010101;
+				color: #dcdcdc;
+				position: absolute;
+				bottom: 3px;
+				left: 60px;
+			}
 			textarea {
 				background-color: #010101;
 				border: 0px;
 				color: #fff;
 				width: 100%;
-				height: 100%;
+				top: 0px;
+				bottom: 40px;
 				resize: none;
+				position: absolute;
+				outline: 0;
 			}
 			div#resultholder {
 				padding: 5px;
@@ -84,6 +102,11 @@ return doctype()(
 	tag"body"(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
 		tag"button"[{id="submit",action=ret.url}]("Paste!"),
+		tag"div"[{class="pasteTypeHolder"}](
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio1",checked=""}]("Normal"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio2"}]("Raw"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio3"}]("HTML")
+		),
 		tag"div"[{id="resultholder"}](
 			tag"a"[{id="result"}]
 		)
