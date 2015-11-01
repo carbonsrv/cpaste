@@ -8,11 +8,17 @@ return doctype()(
 		tag"script"([[
 			$(document).ready(function() {
 				$('#submit').click(function() {
-					var pasteType = $(".pasteType:checked").val();
 					var sentType = "plain";
-					if (pasteType == "Normal") sentType = "plain";
-					if (pasteType == "Raw") sentType = "raw";
-					if (pasteType == "HTML") sentType = "html";
+					var pasteTypes = document.getElementsByName("pasteType");
+					for (var i = 0; i < coffee.length; i++) {
+					    if (pasteTypes[i].checked) {
+					    	var val = pasteTypes[i].value;
+					    	if (val == "Normal") sentType = "plain";
+						if (val == "Raw") sentType = "raw";
+						if (val == "HTML") sentType = "html";
+						break;
+					    }
+					}
 					$.ajax({
 						data: {
 							c: $('textarea').val(),
