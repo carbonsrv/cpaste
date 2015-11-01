@@ -3,7 +3,12 @@ print("Morning, Ladies and Gentlemen, CPaste here.")
 -- Settings:
 ret = assert(loadfile("settings.lua")())
 -- Web Paste
-webpaste = assert(loadfile("webpaste.lua")(ret))
+webpaste_f, err = loadfile("webpaste.lua")
+if not err then
+	webpaste = webpaste_f(ret)
+else
+	error(err)
+end
 -- Load css
 local css = ""
 local f = io.open("thirdparty/highlight.css")
