@@ -10,12 +10,12 @@ return doctype()(
 				$('#submit').click(function() {
 					var sentType = "plain";
 					var pasteTypes = document.getElementsByName("pasteType");
-					for (var i = 0; i < coffee.length; i++) {
+					for (var i = 0; i < pasteTypes.length; i++) {
 					    if (pasteTypes[i].checked) {
-					    	var val = pasteTypes[i].value;
-					    	if (val == "Normal") sentType = "plain";
-						if (val == "Raw") sentType = "raw";
-						if (val == "HTML") sentType = "html";
+					    	var val = pasteTypes[i].id;
+					    	if (val == "radio1") sentType = "plain";
+						if (val == "radio2") sentType = "raw";
+						if (val == "radio3") sentType = "html";
 						break;
 					    }
 					}
@@ -105,9 +105,9 @@ return doctype()(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
 		tag"button"[{id="submit",action=ret.url}]("Paste!"),
 		tag"div"[{class="pasteTypeHolder"}](
-			tag"input"[{type="radio",class="pasteType",name="pasteType",checked=""}]("Normal"),
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Raw"),
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("HTML")
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio1",checked=""}]("Normal"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio2"}]("Raw"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio3"}]("HTML")
 		),
 		tag"div"[{id="resultholder"}](
 			tag"a"[{id="result"}]
