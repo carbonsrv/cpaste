@@ -45,6 +45,7 @@ return doctype()(
 				margin: 0px;
 				width: 100%;
 				height: 100%;
+				background-color: #010101;
 			}
 			button {
 				padding: 5px;
@@ -76,8 +77,11 @@ return doctype()(
 				border: 0px;
 				color: #fff;
 				width: 100%;
-				height: 100%;
+				top: 0px;
+				bottom: 40px;
 				resize: none;
+				position: absolute;
+				outline: 0;
 			}
 			div#resultholder {
 				padding: 5px;
