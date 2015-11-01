@@ -65,13 +65,13 @@ return doctype()(
 				bottom: 5px;
 			}
 			pasteType1 {
-				left: 30px;
-			}
-			pasteType2 {
 				left: 60px;
 			}
+			pasteType2 {
+				left: 120px;
+			}
 			pasteType3 {
-				left: 90px;
+				left: 1800px;
 			}
 			textarea {
 				background-color: #010101;
@@ -106,7 +106,6 @@ return doctype()(
 	tag"body"(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
 		tag"button"[{id="submit",action=ret.url}]("Paste!"),
-		"Paste as: ",
 		tag"form"[{action=""}](
 			tag"input"[{type="radio",class="pasteType",name="pasteType1"}]("Normal"),
 			tag"input"[{type="radio",class="pasteType",name="pasteType2"}]("Raw"),
