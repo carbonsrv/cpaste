@@ -99,7 +99,7 @@ return doctype()(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
 		tag"button"[{id="submit",action=ret.url}]("Paste!"),
 		tag"div"[{class="pasteTypeHolder"}](
-			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Normal"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",checked=""}]("Normal"),
 			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("Raw"),
 			tag"input"[{type="radio",class="pasteType",name="pasteType"}]("HTML")
 		),
