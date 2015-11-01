@@ -10,14 +10,16 @@ return doctype()(
 				$('#submit').click(function() {
 					var sentType = "plain";
 					var pasteTypes = document.getElementsByName("pasteType");
-					for (var i = 0; i < pasteTypes.length; i++) {
-					    if (pasteTypes[i].checked) {
-					    	var val = pasteTypes[i].id;
-					    	if (val == "radio1") sentType = "plain";
-						if (val == "radio2") sentType = "raw";
-						if (val == "radio3") sentType = "html";
-						break;
-					    }
+					var i = 0;
+					while (true) {
+						if (i >= pasteTypes.length) break;
+						if (pasteTypes[i].checked) {
+							var val = pasteTypes[i].id;
+							if (val == "radio1") sentType = "plain";
+							if (val == "radio2") sentType = "raw";
+							if (val == "radio3") sentType = "html";
+							break;
+						}
 					}
 					$.ajax({
 						data: {
