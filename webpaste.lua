@@ -12,7 +12,6 @@ return doctype()(
 					var pasteTypes = document.getElementsByName("pasteType");
 					var i = 0;
 					while (true) {
-						if (i >= pasteTypes.length) break;
 						if (pasteTypes[i].checked) {
 							var val = pasteTypes[i].id;
 							if (val == "radio1") sentType = "plain";
