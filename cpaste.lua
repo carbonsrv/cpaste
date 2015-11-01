@@ -77,12 +77,17 @@ srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("c") or form("f")
 	local type = form("type") or "plain"
+	local expire = tonumber(form("expire")) or expiretime
 	local giveraw = false
 	local giverawform = form("raw")
 	if giverawform == "true" or giverawform == "yes" or giverawform == "y" then
 		giveraw = true
 	else
 		giveraw = false
+	end
+	expire = expire * 60 --Convert the expiration time from seconds to minutes
+	if expire > expiretime then --Prevent the expiration time getting too high
+		expire = expiretime
 	end
 	if data then
 		if #data <= maxpastesize then
@@ -103,9 +108,9 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			if err ~= nil then error(err) end
 			local r, err = con.Cmd("set", "cpastemdata:"..id, type) -- Set cpastemdata:<randomid> to the metadata
 			if err ~= nil then error(err) end
-			local r, err = con.Cmd("expire", "cpaste:"..id, expiretime) -- Make it expire
+			local r, err = con.Cmd("expire", "cpaste:"..id, expire) -- Make it expire
 			if err ~= nil then error(err) end
-			local r, err = con.Cmd("expire", "cpastemdata:"..id, expiretime) -- Make it expire
+			local r, err = con.Cmd("expire", "cpastemdata:"..id, expire) -- Make it expire
 			if err ~= nil then error(err) end
 			con.Close()
 			if giveraw then
