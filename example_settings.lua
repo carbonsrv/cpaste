@@ -31,10 +31,10 @@ mainpage = doctype()(
 -- End
 
 -- Things required to make this stuff actually work! \o/
-local ret = {}
-ret.url = url
-ret.expiresecs = expiresecs
-ret.mainpage = mainpage
-ret.redis = redis
-ret.maxpastesize = maxpastesize
+local settings = {}
+settings.url = url
+settings.expiresecs = expiresecs
+settings.mainpage = mainpage
+settings.redis = redis
+settings.maxpastesize = maxpastesize
 return ret
