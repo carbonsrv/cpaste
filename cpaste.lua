@@ -90,7 +90,7 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 	else
 		giveraw = false
 	end
-	expire = expire * 60 --Convert the expiration time from seconds to minutes
+	expire = expire / 60 --Convert the expiration time from seconds to minutes
 	if expire > expiretime then --Prevent the expiration time getting too high
 		expire = expiretime
 	end
