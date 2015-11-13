@@ -1,11 +1,11 @@
 -- CPaste, micro pastebin running on Carbon
 print("Morning, Ladies and Gentlemen, CPaste here.")
 -- Settings:
-ret = assert(loadfile("settings.lua")())
+settings = assert(loadfile("settings.lua")())
 -- Web Paste
 webpaste_f, err = loadfile("webpaste.lua")
 if not err then
-	webpaste = webpaste_f(ret)
+	webpaste = webpaste_f(settings)
 else
 	error(err)
 end
@@ -73,12 +73,12 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		end
 		con.Close()
 	end
-end, {redis_addr=ret.redis, url=ret.url, webpaste=webpaste, hlcss=css})
+end, {redis_addr=settings.redis, url=settings.url, webpaste=webpaste, hlcss=css})
 
 srv.GET("/:seg1", getplain)
 srv.GET("/:seg1/*seg2", getplain)
 
-srv.GET("/", mw.echo(ret.mainpage)) -- Main page.
+srv.GET("/", mw.echo(settings.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("c") or form("f")
 	local type = form("type") or "plain"
@@ -129,6 +129,6 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 	else
 		content("No content given.", 400, "text/plain")
 	end
-end, {url=ret.url, expiretime=ret.expiresecs, redis_addr=ret.redis, maxpastesize=ret.maxpastesize}))
+end, {url=settings.url, expiretime=settings.expiresecs, redis_addr=settings.redis, maxpastesize=settings.maxpastesize}))
 
 print("Ready for action!")
