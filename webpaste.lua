@@ -1,3 +1,5 @@
+args = {}
+settings = args[1]
 return doctype()(
 	tag"head"(
 		tag"title" "CPaste WebPaste",
@@ -99,7 +101,7 @@ return doctype()(
 	),
 	tag"body"(
 		tag"textarea"[{name="c", placeholder="Hello World!"}](),
-		tag"button"[{id="submit",action=settings.url}]("Paste!"),
+		tag"button"[{id="submit",action=ret.url}]("Paste!"),
 		tag"div"[{class="pasteTypeHolder"}](
 			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio1",checked=""}]("Normal"),
 			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio2"}]("Raw"),
