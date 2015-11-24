@@ -20,6 +20,9 @@ end
 -- Actual Code:
 srv.Use(mw.Logger()) -- Activate logger.
 
+srv.GET("/", mw.echo(settings.mainpage)) -- Main page.
+srv.GET("/paste", mw.echo(webpaste))
+
 getplain = mw.new(function() -- Main Retrieval of Pastes.
 	local seg1 = params("seg1")
 	local seg2 = params("seg2")
@@ -36,9 +39,7 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		end
 		id = id:sub(2, -1)
 	end
-	if seg1 == "paste" then
-		content(webpaste)
-	elseif #id ~= 8 or id == nil then
+	if #id ~= 8 or id == nil then
 		content("No such paste.", 404, "text/plain")
 	else
 		local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
@@ -73,12 +74,11 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 		end
 		con.Close()
 	end
-end, {redis_addr=settings.redis, url=settings.url, webpaste=webpaste, hlcss=css})
+end, {redis_addr=settings.redis, url=settings.url, hlcss=css})
 
-srv.GET("/:seg1", getplain)
-srv.GET("/:seg1/*seg2", getplain)
+srv.GET("/p/:seg1", getplain)
+srv.GET("/p/:seg1/*seg2", getplain)
 
-srv.GET("/", mw.echo(settings.mainpage)) -- Main page.
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("c") or form("f")
 	local type = form("type") or "plain"
@@ -119,9 +119,9 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			if err ~= nil then error(err) end
 			con.Close()
 			if giveraw then
-				content(url.."raw/"..id.."\n", 200, "text/plain")
+				content(url.."p/raw/"..id.."\n", 200, "text/plain")
 			else
-				content(url..id.."\n", 200, "text/plain")
+				content(url.."p/"..id.."\n", 200, "text/plain")
 			end
 		else
 			content("Content too big. Max is "..tostring(maxpastesize).." Bytes, given "..tostring(#data).." Bytes.", 400, "text/plain")
