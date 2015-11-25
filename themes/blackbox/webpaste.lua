@@ -1,5 +1,5 @@
-args = {...}
-settings = args[1]
+local args = {...}
+local settings = args[1]
 return doctype()(
 	tag"head"(
 		tag"title" "CPaste WebPaste",

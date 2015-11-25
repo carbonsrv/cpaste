@@ -3,6 +3,7 @@ url = "http://mydomain.mytld:8081/"
 redis = "127.0.0.1:6379"
 expiresecs = 604800
 maxpastesize = 64 * 1024 -- 64KiB
+theme = "blackbox"
 mainpage = doctype()(
 	tag"head"(
 		tag"title" "CPaste Server"
@@ -37,4 +38,5 @@ settings.expiresecs = expiresecs
 settings.mainpage = mainpage
 settings.redis = redis
 settings.maxpastesize = maxpastesize
+settings.theme = theme
 return settings

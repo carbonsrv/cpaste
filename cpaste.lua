@@ -3,7 +3,7 @@ print("Morning, Ladies and Gentlemen, CPaste here.")
 -- Settings:
 settings = assert(loadfile("settings.lua")())
 -- Web Paste
-webpaste_f, err = loadfile("webpaste.lua")
+webpaste_f, err = loadfile("themes/"..settings.theme.."/webpaste.lua")
 if not err then
 	webpaste = webpaste_f(settings)
 else
