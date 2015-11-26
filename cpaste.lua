@@ -18,8 +18,6 @@ if f then
 	f:close()
 end
 -- Actual Code:
-srv.Use(mw.Logger()) -- Activate logger.
-
 srv.GET("/", mw.echo(settings.mainpage)) -- Main page.
 srv.GET("/paste", mw.echo(webpaste))
 
