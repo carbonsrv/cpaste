@@ -56,7 +56,7 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 				)
 			))
 		else
-			if (forceRaw and cpastemdata == "normal") or cpastemdata == "plain" then
+			if (forceRaw and cpastemdata == "normal") or cpastemdata == "raw" then
 				content(res, 200, "text/plain")
 			elseif cpastemdata == "normal" then
 				content(syntaxhl(res, hlcss), 200)
