@@ -8,11 +8,11 @@ return doctype()(
 		tag"script"([[
 			$(document).ready(function() {
 				$('#submit').click(function() {
-					var sentType = "plain";
+					var sentType = "normal";
 					var pasteTypes = document.getElementsByName("pasteType");
-					if (pasteTypes[0].checked) sentType = "plain";
-					if (pasteTypes[1].checked) sentType = "raw";
-					if (pasteTypes[2].checked) sentType = "html";
+					if (pasteTypes[0].checked) sentType = "normal";
+					if (pasteTypes[1].checked) sentType = "plain";
+					if (pasteTypes[2].checked) sentType = "text/html";
 					$.ajax({
 						data: {
 							c: $('textarea').val(),
@@ -104,7 +104,7 @@ return doctype()(
 		tag"button"[{id="submit",action=settings.url}]("Paste!"),
 		tag"div"[{class="pasteTypeHolder"}](
 			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio1",checked=""}]("Normal"),
-			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio2"}]("Raw"),
+			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio2"}]("Plain"),
 			tag"input"[{type="radio",class="pasteType",name="pasteType",id="radio3"}]("HTML")
 		),
 		tag"div"[{id="resultholder"}](

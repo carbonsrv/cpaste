@@ -25,11 +25,11 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 	local seg1 = params("seg1")
 	local seg2 = params("seg2")
 	local id = seg2
-	local method = "pretty"
+	local forceRaw = false
 	if id == nil then
 		id = seg1
 	else
-		method = seg1
+		if seg1 == "raw" then forceRaw = true end
 		id = seg2
 		if id == nil then
 			content("No such paste.", 404, "text/plain")
@@ -40,7 +40,7 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 	if #id ~= 8 or id == nil then
 		content("No such paste.", 404, "text/plain")
 	else
-		local con, err = redis.connectTimeout(redis_addr, 10) -- Connect to Redis
+		local con, err = redis.connectTimeout(redis_addr, 30) -- Connect to Redis
 		if err ~= nil then error(err) end
 		local res,err = con.Cmd("get", "cpaste:"..id).String() -- Get cpaste:<ID>
 		if err ~= nil then error(err) end
@@ -56,18 +56,12 @@ getplain = mw.new(function() -- Main Retrieval of Pastes.
 				)
 			))
 		else
-			if method == "raw" then
+			if (forceRaw and cpastemdata == "normal") or cpastemdata == "plain" then
 				content(res, 200, "text/plain")
-			elseif method == "pretty" or method == "hl" then
-				if cpastemdata == "html" then
-					content(res)
-				elseif cpastemdata == "plain" then
-					content(syntaxhl(res, hlcss), 200)
-				else
-					content(res, 200, cpastemdata)
-				end
+			elseif cpastemdata == "normal" then
+				content(syntaxhl(res, hlcss), 200)
 			else
-				content("No such action. (Try 'raw' or 'pretty')", 404)
+				content(res, 200, cpastemdata)
 			end
 		end
 		con.Close()
@@ -79,15 +73,8 @@ srv.GET("/p/:seg1/*seg2", getplain)
 
 srv.POST("/", mw.new(function() -- Putting up pastes
 	local data = form("c") or form("f")
-	local type = form("type") or "plain"
+	local type = form("type") or "normal"
 	local expire = tonumber(form("expire")) or expiretime
-	local giveraw = false
-	local giverawform = form("raw")
-	if giverawform == "true" or giverawform == "yes" or giverawform == "y" then
-		giveraw = true
-	else
-		giveraw = false
-	end
 	expire = expire * 60 --Convert the expiration time from minutes to seconds
 	if expire > expiretime then --Prevent the expiration time getting too high
 		expire = expiretime
@@ -116,11 +103,7 @@ srv.POST("/", mw.new(function() -- Putting up pastes
 			local r, err = con.Cmd("expire", "cpastemdata:"..id, expire) -- Make it expire
 			if err ~= nil then error(err) end
 			con.Close()
-			if giveraw then
-				content(url.."p/raw/"..id.."\n", 200, "text/plain")
-			else
-				content(url.."p/"..id.."\n", 200, "text/plain")
-			end
+			content(url.."p/"..id.."\n", 200, "text/plain")
 		else
 			content("Content too big. Max is "..tostring(maxpastesize).." Bytes, given "..tostring(#data).." Bytes.", 400, "text/plain")
 		end
