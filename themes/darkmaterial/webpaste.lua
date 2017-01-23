@@ -8,11 +8,11 @@ return doctype()(
 		tag"script"([[
 			$(document).ready(function() {
 				$('#submit').click(function() {
-					var sentType = "plain";
+					var sentType = "normal";
 					var pasteTypes = document.getElementsByName("pasteType");
-					if (pasteTypes[0].checked) sentType = "plain";
+					if (pasteTypes[0].checked) sentType = "normal";
 					if (pasteTypes[1].checked) sentType = "raw";
-					if (pasteTypes[2].checked) sentType = "html";
+					if (pasteTypes[2].checked) sentType = "text/html";
 					$.ajax({
 						data: {
 							c: $('textarea').val(),
